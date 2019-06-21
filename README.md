@@ -5,7 +5,8 @@
 ## Getting started
 
 **服务启动**
-利用AirliftServer启动服务
+
+利用`AirliftServer`启动服务
 
 ```java
 package com.airlift.consumer;

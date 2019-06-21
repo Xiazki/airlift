@@ -1,4 +1,4 @@
-package com.xiazki.airlift.common;
+package com.airlift.common;
 
 import java.net.InetAddress;
 
