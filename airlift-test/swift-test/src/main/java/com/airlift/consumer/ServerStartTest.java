@@ -1,17 +1,15 @@
 package com.airlift.consumer;
 
-import com.airlift.api.HelloWorldApi;
 import com.airlift.provider.HelloWorldApiService;
 import com.airlift.server.AirliftServer;
 import com.airlift.server.config.ServerConfig;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ServerStartTest {
 
-    public static void main(String[] args) throws InterruptedException, IOException {
+    public static void main(String[] args){
         AirliftServer airliftServer = new AirliftServer();
         List<Object> services = new ArrayList<>();
         services.add(new HelloWorldApiService());

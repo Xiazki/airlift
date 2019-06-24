@@ -34,8 +34,8 @@ public class TestConsumer {
             FramedClientConnector connector2 = new FramedClientConnector(HostAndPort.fromParts("localhost", server2.getPort()));
 
             HelloWorldApi helloWorldApi = thriftClientManager.createClient(connector, HelloWorldApi.class).get();
-            HelloWorldApi helloWorldApi1 = thriftClientManager.createClient(connector, HelloWorldApi.class).get();
-            HelloWorldApi helloWorldApi2 = thriftClientManager.createClient(connector, HelloWorldApi.class).get();
+            HelloWorldApi helloWorldApi1 = thriftClientManager.createClient(connector1, HelloWorldApi.class).get();
+            HelloWorldApi helloWorldApi2 = thriftClientManager.createClient(connector2, HelloWorldApi.class).get();
 
             ResultBean resultBean = helloWorldApi.getHi("xiaxiang");
             ResultBean resultBean1 = helloWorldApi1.getHi("xiaxiang1");
