@@ -22,6 +22,8 @@
         <slf4j.version>1.7.26</slf4j.version>
         <zookeeper.version>3.5.4-beta</zookeeper.version>
         <curator.version>2.11.1</curator.version>
+        <javassist.version>3.20.0-GA</javassist.version>
+        <pool.version>2.6.2</pool.version>
     </properties>
 
     <dependencyManagement>
@@ -42,9 +44,9 @@
                 <version>${slf4j.version}</version>
             </dependency>
             <!--<dependency>-->
-                <!--<groupId>org.apache.zookeeper</groupId>-->
-                <!--<artifactId>zookeeper</artifactId>-->
-                <!--<version>${zookeeper.version}</version>-->
+            <!--<groupId>org.apache.zookeeper</groupId>-->
+            <!--<artifactId>zookeeper</artifactId>-->
+            <!--<version>${zookeeper.version}</version>-->
             <!--</dependency>-->
             <dependency>
                 <groupId>org.apache.curator</groupId>
@@ -55,6 +57,18 @@
                 <groupId>org.apache.curator</groupId>
                 <artifactId>curator-recipes</artifactId>
                 <version>${curator.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${javassist.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${pool.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

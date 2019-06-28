@@ -13,11 +13,8 @@ public class CuratorTest {
                 .retryPolicy(new ExponentialBackoffRetry(10, 5))
                 .build();
         curatorFramework.start();
-
         Thread.sleep(7000);
-
         curatorFramework.delete().deletingChildrenIfNeeded().forPath("/airlift");
-
 
     }
 

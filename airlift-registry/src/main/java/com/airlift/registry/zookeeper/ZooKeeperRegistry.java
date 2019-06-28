@@ -19,6 +19,7 @@ public class ZooKeeperRegistry implements Registry {
     private CuratorFramework zkClient;
     private URL url;
     private static final String root = "/airlift";
+    private List<URL> urlList;
 
     public ZooKeeperRegistry(URL url, ZooKeeperCuratorConnection zooKeeperCuratorConnection) {
         try {
@@ -46,6 +47,7 @@ public class ZooKeeperRegistry implements Registry {
         try {
             List<String> provider = zkClient.getChildren().forPath(toServiceNodePath());
             return provider.stream().map(this::toURL).collect(Collectors.toList());
+//            return urlList;
         } catch (Throwable e) {
             throw new RegistryException("failed to lookup " + url + " from zookeeper,case: " + e.getMessage(), e);
         }
