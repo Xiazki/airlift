@@ -1,4 +1,4 @@
-package com.airlift.client;
+package com.airlift.client.config;
 
 public class ConnectionConfig {
 
