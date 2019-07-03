@@ -29,6 +29,7 @@ public class FailRetryCluster extends AbstractPoolCluster {
     public void connect(URL url) {
         if (!StringUtils.isEmpty(url.getRegistryUrls())) {
             registry = RegistryFactoryProvider.INSTANCE.getRegistryFactory(RegistryType.ZOOKEEPER).get(url);
+            registry.subscribe();
         }
         this.url = url;
     }
@@ -37,7 +38,8 @@ public class FailRetryCluster extends AbstractPoolCluster {
     public <T> Invoker<T> getInvoker() {
         return invocation -> {
             int count = retry;
-            NiftyClientChannel channel = getPool().borrowObject(url);
+            URL selectedUrl = route();
+            NiftyClientChannel channel = getPool().borrowObject(selectedUrl);
             T client = thriftClientManager.createClient(channel, invocation.getClientProxy());
             while (count > 0) {
                 try {
@@ -64,20 +66,7 @@ public class FailRetryCluster extends AbstractPoolCluster {
         return loadBalance.select(registry.lookup());
     }
 
-    @Override
-    public Long getReadTimeout() {
-        return null;
-    }
 
-    @Override
-    public Long getConnectionTimeout() {
-        return null;
-    }
-
-    @Override
-    public Long getWriteTimeout() {
-        return null;
-    }
 
     public LoadBalance getLoadBalance() {
         return loadBalance;

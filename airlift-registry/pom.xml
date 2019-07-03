@@ -24,6 +24,13 @@
             <artifactId>curator-recipes</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.xiazki</groupId>
+            <artifactId>airlift-common</artifactId>
+            <version>1.0</version>
+        </dependency>
+
     </dependencies>
+
 
 </project>
