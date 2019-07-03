@@ -9,12 +9,16 @@ import java.util.List;
 
 public class ServerStartTest {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         List<Object> services = new ArrayList<>();
         services.add(new HelloWorldApiService());
 
-        AirliftServer airliftServer = new AirliftServer(ServerConfig.builder().withPort(9013).withRegistryUrls("127.0.0.1:2181").build());
+        AirliftServer airliftServer = new AirliftServer(ServerConfig.builder()
+                .withPort(9013)
+                .withRegistryUrls("127.0.0.1:2181")
+                .build());
+
         airliftServer.setServices(services);
 
         airliftServer.start();
