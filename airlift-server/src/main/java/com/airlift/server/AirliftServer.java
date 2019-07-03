@@ -41,6 +41,10 @@ public class AirliftServer implements Closeable {
         serverConfig.setPort(port);
     }
 
+    public AirliftServer(ServerConfig serverConfig) {
+        this.serverConfig = serverConfig;
+    }
+
     public void start() {
         prepare();
         export();
