@@ -41,14 +41,15 @@ public class AirliftServer implements Closeable {
         serverConfig.setPort(port);
     }
 
-    public AirliftServer(ServerConfig serverConfig) {
+    public AirliftServer(ServerConfig serverConfig, List<Object> services) {
         this.serverConfig = serverConfig;
     }
 
-    public void start() {
+    public AirliftServer start() {
         prepare();
         export();
         registry();
+        return this;
     }
 
     @Override
@@ -120,6 +121,7 @@ public class AirliftServer implements Closeable {
         url.setServiceInterface(serviceInterface);
         url.setApplicationName(serverConfig.getApplicationName());
         url.setRegistryUrls(serverConfig.getRegistryUrls());
+        url.setKeyValue("server");
         return url;
     }
 

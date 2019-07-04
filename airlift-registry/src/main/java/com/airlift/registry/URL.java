@@ -10,7 +10,7 @@ public class URL {
     private int port;
     private String registryUrls;
     private String serviceInterface;
-    private String keyValue;
+    private String keyValue = "airlift";
 
     public String getApplicationName() {
         return applicationName;
@@ -79,7 +79,7 @@ public class URL {
         return new URLBuilder();
     }
 
-    private static final class URLBuilder {
+    public static final class URLBuilder {
         private String applicationName;
         private String host;
         private int port;

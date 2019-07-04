@@ -28,4 +28,6 @@ public class ResultBean {
     public void setCode(String code) {
         this.code = code;
     }
+
+
 }

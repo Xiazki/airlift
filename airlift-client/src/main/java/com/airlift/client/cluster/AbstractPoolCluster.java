@@ -53,8 +53,8 @@ public abstract class AbstractPoolCluster implements Cluster {
         public NiftyClientChannel create(URL key) throws Exception {
             HostAndPort hostAndPort = HostAndPort.fromParts(key.getHost(), key.getPort());
             NiftyClientConnector connector = new FramedClientConnector(hostAndPort);
-            ListenableFuture<NiftyClientChannel> listenableFuture = thriftClientManager.createChannel(connector, connectionTimeout, receiveTimeout, readTimeout, writeTimeout, DEFAULT_MAX_FRAME_SIZE, null);
-            return listenableFuture.get(connectionTimeout.toMillis(), TimeUnit.MILLISECONDS);
+            ListenableFuture listenableFuture = thriftClientManager.createChannel(connector, connectionTimeout, receiveTimeout, readTimeout, writeTimeout, DEFAULT_MAX_FRAME_SIZE, null);
+            return (NiftyClientChannel) listenableFuture.get(connectionTimeout.toMillis(), TimeUnit.MILLISECONDS);
         }
 
         @Override

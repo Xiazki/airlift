@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-import java.util.List;
 
 public class FailRetryCluster extends AbstractPoolCluster {
 
@@ -40,20 +39,23 @@ public class FailRetryCluster extends AbstractPoolCluster {
             int count = retry;
             URL selectedUrl = route();
             NiftyClientChannel channel = getPool().borrowObject(selectedUrl);
+            if (channel == null) {
+                throw new RPCException("call " + invocation.getMethodName() + " failed,connection is closed");
+            }
             T client = thriftClientManager.createClient(channel, invocation.getClientProxy());
             while (count > 0) {
                 try {
                     return invocation.getMethod().invoke(client, invocation.getArguments());
                 } catch (Exception e) {
                     //todo 通过异常来处理连接池的连接
-                    logger.warn("call {} err:{},retry:{}", invocation.getMethodName(), e.getMessage(), count);
+                    logger.warn("call {} failed err:{},retry:{}", invocation.getMethodName(), e.getMessage(), count);
                     count--;
                     if (count == 0) {
-                        throw new RPCException("call " + invocation.getMethodName() + "failed ", e);
+                        throw new RPCException("call " + invocation.getMethodName() + " failed", e);
                     }
                 }
             }
-            throw new RPCException("call " + invocation.getMethodName() + "failed ");
+            throw new RPCException("call " + invocation.getMethodName() + " failed");
         };
     }
 
@@ -84,11 +86,13 @@ public class FailRetryCluster extends AbstractPoolCluster {
         this.url = url;
     }
 
+
     private interface RetryHelper {
 
         Object callWithRetry();
 
     }
+
 
     private class InvokerPoxyWapper implements Invoker {
 
