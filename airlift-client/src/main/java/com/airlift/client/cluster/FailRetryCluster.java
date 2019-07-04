@@ -3,6 +3,7 @@ package com.airlift.client.cluster;
 import com.airlift.client.Invocation;
 import com.airlift.client.Invoker;
 import com.airlift.client.balance.LoadBalance;
+import com.airlift.client.balance.SimpleRandomLoadBalance;
 import com.airlift.client.exception.RPCException;
 import com.airlift.registry.Registry;
 import com.airlift.registry.RegistryFactoryProvider;
@@ -14,13 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-
 public class FailRetryCluster extends AbstractPoolCluster {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private URL url;
-    private LoadBalance loadBalance;
+    private LoadBalance loadBalance = new SimpleRandomLoadBalance();
     private Registry registry;
     private int retry = 3;
 
@@ -67,7 +67,6 @@ public class FailRetryCluster extends AbstractPoolCluster {
         //todo balance
         return loadBalance.select(registry.lookup());
     }
-
 
 
     public LoadBalance getLoadBalance() {
