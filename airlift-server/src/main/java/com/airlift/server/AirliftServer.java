@@ -3,10 +3,7 @@ package com.airlift.server;
 import com.airlift.registry.*;
 import com.airlift.server.config.ServerConfig;
 import com.facebook.swift.codec.ThriftCodecManager;
-import com.facebook.swift.service.ThriftEventHandler;
-import com.facebook.swift.service.ThriftServer;
-import com.facebook.swift.service.ThriftServerConfig;
-import com.facebook.swift.service.ThriftServiceProcessor;
+import com.facebook.swift.service.*;
 import com.airlift.common.IPUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +40,7 @@ public class AirliftServer implements Closeable {
 
     public AirliftServer(ServerConfig serverConfig, List<Object> services) {
         this.serverConfig = serverConfig;
+        this.services = services;
     }
 
     public AirliftServer start() {
@@ -99,7 +97,7 @@ public class AirliftServer implements Closeable {
         }
         if (serverConfig.isNeedRegistry() && serverConfig.getRegistryUrls() != null) {
             this.registryFactory = RegistryFactoryProvider.INSTANCE.getRegistryFactory(RegistryType.ZOOKEEPER);
-            services.forEach(o -> providerUrls.add(createUrl(o.getClass().getName())));
+            services.forEach(o -> providerUrls.add(createUrl(getThriftInterfaceService(o.getClass()))));
         }
     }
 
@@ -123,6 +121,15 @@ public class AirliftServer implements Closeable {
         url.setRegistryUrls(serverConfig.getRegistryUrls());
         url.setKeyValue("server");
         return url;
+    }
+
+    private String getThriftInterfaceService(Class clazz) {
+        for (Class c : clazz.getInterfaces()) {
+            if (c.getAnnotation(ThriftService.class) != null) {
+                return c.getName();
+            }
+        }
+        throw new IllegalArgumentException("there is an exception in the service class. please check it,class: " + clazz.getName());
     }
 
     public List<Object> getServices() {

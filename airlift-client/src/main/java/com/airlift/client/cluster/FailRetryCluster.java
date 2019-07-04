@@ -10,7 +10,6 @@ import com.airlift.registry.RegistryFactoryProvider;
 import com.airlift.registry.RegistryType;
 import com.airlift.registry.URL;
 import com.facebook.nifty.client.NiftyClientChannel;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +25,7 @@ public class FailRetryCluster extends AbstractPoolCluster {
 
     @Override
     public void connect(URL url) {
-        if (!StringUtils.isEmpty(url.getRegistryUrls())) {
+        if (url.getRegistryUrls() != null && !url.getRegistryUrls().trim().equals("")) {
             registry = RegistryFactoryProvider.INSTANCE.getRegistryFactory(RegistryType.ZOOKEEPER).get(url);
             registry.subscribe();
         }
@@ -67,7 +66,6 @@ public class FailRetryCluster extends AbstractPoolCluster {
         //todo balance
         return loadBalance.select(registry.lookup());
     }
-
 
     public LoadBalance getLoadBalance() {
         return loadBalance;

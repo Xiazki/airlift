@@ -63,7 +63,6 @@ public class HelloWorldApiService implements HelloWorldApi {
 使用`AirliftServer`启动服务，服务监听9013，`withRegistryUrls("127.0.0.1:2181")` 注册zookeeper地址,多个地址用`;`拼接。
 使用`AirliftClientFactory`来创建客户端代理。
 ```java
-
 public class ServerStartTest {
     public static void main(String[] args) {
         List<Object> services = new ArrayList<>();

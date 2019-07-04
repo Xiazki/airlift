@@ -5,7 +5,6 @@ import com.airlift.client.cluster.FailRetryCluster;
 import com.airlift.client.config.ClientConfig;
 import com.airlift.client.exception.RPCException;
 import com.airlift.registry.URL;
-import com.facebook.swift.service.ThriftClientManager;
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
@@ -22,8 +21,9 @@ public class AirliftClientFactory<T> implements Closeable {
     private Class<T> interfaceClass;
     private volatile T client;
 
-    public AirliftClientFactory(ClientConfig clientConfig) {
+    public AirliftClientFactory(Class<T> interfaceClass, ClientConfig clientConfig) {
         this.clientConfig = clientConfig;
+        this.interfaceClass = interfaceClass;
     }
 
     public T get() {
@@ -87,6 +87,7 @@ public class AirliftClientFactory<T> implements Closeable {
                 .withHost(clientConfig.getHost())
                 .withPort(clientConfig.getPort())
                 .withKeyValue("client")
+                .withServiceInterface(interfaceClass.getName())
                 .withRegistryUrls(clientConfig.getRegistryUrls())
                 .build();
     }

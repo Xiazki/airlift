@@ -15,7 +15,13 @@ import java.util.List;
 public class ServerStartTest {
 
     public static void main(String[] args) {
+        List<Object> services = new ArrayList<>();
+        services.add(new HelloWorldApiService());
+        ServerConfig serverConfig = ServerConfig.builder().withPort(9013).withRegistryUrls("127.0.0.1:2181").build();
+        new AirliftServer(serverConfig, services).start();
+    }
 
+    public static void testStart() {
         List<Object> services = new ArrayList<>();
         services.add(new HelloWorldApiService());
 
@@ -23,10 +29,9 @@ public class ServerStartTest {
         ClientConfig clientConfig = ClientConfig.builer().withPort(9013).withRegistryUrls("127.0.0.1:2181").withHost("127.0.0.1").build();
         try (
                 AirliftServer airliftServer = new AirliftServer(serverConfig, services).start();
-                AirliftClientFactory<HelloWorldApi> clientFactory = new AirliftClientFactory<>(clientConfig);
+                AirliftClientFactory<HelloWorldApi> clientFactory = new AirliftClientFactory<>(HelloWorldApi.class, clientConfig);
 
         ) {
-
             HelloWorldApi helloWorldApi = clientFactory.get();
             ResultBean resultBean = helloWorldApi.getHi("test");
             System.out.println(resultBean.getMessage());
@@ -34,7 +39,6 @@ public class ServerStartTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 }

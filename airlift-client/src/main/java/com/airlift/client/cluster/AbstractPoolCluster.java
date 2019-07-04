@@ -11,6 +11,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import io.airlift.units.Duration;
 import org.apache.commons.pool2.BaseKeyedPooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
+import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 import org.jboss.netty.channel.Channel;
@@ -59,7 +60,7 @@ public abstract class AbstractPoolCluster implements Cluster {
 
         @Override
         public PooledObject<NiftyClientChannel> wrap(NiftyClientChannel value) {
-            return null;
+            return new DefaultPooledObject<>(value);
         }
 
         @Override
