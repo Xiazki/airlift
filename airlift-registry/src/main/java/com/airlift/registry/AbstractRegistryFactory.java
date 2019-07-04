@@ -19,7 +19,7 @@ public abstract class AbstractRegistryFactory {
 
     public abstract Registry create(URL url);
 
-    public void distoryAll() {
+    public void destroyAll() {
         LOCK.lock();
         try {
             for (Registry registry : getRegistries()) {
@@ -45,7 +45,7 @@ public abstract class AbstractRegistryFactory {
             }
             registry = create(url);
             if (registry == null) {
-                throw new RegistryException("can not create registry " + url, null);
+                throw new RegistryException("can not create registry " + url);
             }
             REGISTRIES.put(key, registry);
             return registry;

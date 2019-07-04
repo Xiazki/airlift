@@ -18,12 +18,12 @@ public class Offline {
                 try {
                     registry.doUnRegister();
                 } catch (Exception e) {
-                    logger.error("do un registry failed", e);
+                    logger.error("do unregistry failed", e);
                 }
 
             });
         }
-        registryFactory.distoryAll();
+        registryFactory.destroyAll();
     }
 
 }
