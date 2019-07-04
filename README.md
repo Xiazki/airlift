@@ -1,6 +1,6 @@
 # airlift
-airlift是一个基于thrift的rpc服务框架，利用[Swift](https://github.com/facebookarchive/swift)(停止维护了:pensive:)提供的注解来创建简单可序列化的thrift类型和服务。并且利用zookeeper提供了动态的注册和服务发现
-并且增加了客户端的负载均衡、重试机制。
+airlift是一个基于thrift的rpc服务框架，利用[Swift](https://github.com/facebookarchive/swift)(停止维护了:pensive:)提供的注解来创建简单可序列化的thrift类型和服务。利用zookeeper提供了动态的注册和服务发现
+并增加了客户端的负载均衡、重试机制。
 
 
 ## Getting started
