@@ -1,6 +1,5 @@
 package com.airlift.client;
 
-import com.airlift.registry.URL;
 import com.facebook.swift.service.ThriftClientManager;
 
 /**

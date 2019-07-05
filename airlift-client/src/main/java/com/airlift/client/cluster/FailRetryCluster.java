@@ -13,6 +13,8 @@ import com.facebook.nifty.client.NiftyClientChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
+
 
 public class FailRetryCluster extends AbstractPoolCluster {
 
@@ -35,37 +37,59 @@ public class FailRetryCluster extends AbstractPoolCluster {
     @Override
     public <T> Invoker<T> getInvoker() {
         return invocation -> {
-            int count = retry;
             URL selectedUrl = route();
             NiftyClientChannel channel = getPool().borrowObject(selectedUrl);
             if (channel == null) {
                 throw new RPCException("call " + invocation.getMethodName() + " failed,connection is closed");
             }
             T client = thriftClientManager.createClient(channel, invocation.getClientProxy());
-            while (count > 0) {
-                try {
-                    return invocation.getMethod().invoke(client, invocation.getArguments());
-                } catch (Exception e) {
-                    //todo 通过异常来处理连接池的连接
-                    logger.warn("call {} failed err:{},retry:{}", invocation.getMethodName(), e.getMessage(), count);
-                    count--;
-                    if (count == 0) {
-                        throw new RPCException("call " + invocation.getMethodName() + " failed", e);
-                    }
-                }
-            }
-            throw new RPCException("call " + invocation.getMethodName() + " failed");
+            return callWithRetry(() -> invocation.getMethod().invoke(client, invocation.getArguments()), invocation.getMethodName());
         };
     }
+
 
     @Override
     public URL route() {
         if (registry == null) {
             return url;
         }
-        //todo balance
         return loadBalance.select(registry.lookup());
     }
+
+    private Object callWithRetry(RetryHelper retryHelper, String methodName) {
+        int count = retry;
+        while (count > 0) {
+            try {
+                return retryHelper.invoke();
+            } catch (Exception e) {
+                //todo 通过异常来处理连接池中可能失效的的连接
+                logger.warn("call {} failed err:{},retry:{}", methodName, e.getMessage(), count);
+                count--;
+                if (count == 0) {
+                    throw new RPCException("call " + methodName + " failed", e);
+                }
+            }
+        }
+        throw new RPCException("call " + methodName + " failed");
+    }
+
+    @FunctionalInterface
+    private interface RetryHelper {
+
+        Object invoke() throws Exception;
+
+    }
+
+
+    private class InvokerPoxyWapper implements Invoker {
+
+        @Override
+        public Object invoke(Invocation invocation) {
+            return null;
+        }
+
+    }
+
 
     public LoadBalance getLoadBalance() {
         return loadBalance;
@@ -81,23 +105,6 @@ public class FailRetryCluster extends AbstractPoolCluster {
 
     public void setUrl(URL url) {
         this.url = url;
-    }
-
-
-    private interface RetryHelper {
-
-        Object callWithRetry();
-
-    }
-
-
-    private class InvokerPoxyWapper implements Invoker {
-
-        @Override
-        public Object invoke(Invocation invocation) {
-            return null;
-        }
-
     }
 
 }

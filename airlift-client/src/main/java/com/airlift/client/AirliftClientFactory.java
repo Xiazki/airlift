@@ -49,7 +49,7 @@ public class AirliftClientFactory<T> implements Closeable {
             connectToCluster();
             return createJavassistProxy();
         } catch (Exception e) {
-            throw new RPCException("init client failed,err:{}" + e.getMessage(), e);
+            throw new RPCException("init client failed,err:" + e.getMessage(), e);
         }
     }
 
