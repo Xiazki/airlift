@@ -37,7 +37,7 @@ public class FailRetryCluster extends AbstractPoolCluster {
     @Override
     public <T> Invoker<T> getInvoker() {
         return invocation -> {
-            URL selectedUrl = route();
+            URL selectedUrl = route(invocation);
             NiftyClientChannel channel = getPool().borrowObject(selectedUrl);
             if (channel == null) {
                 throw new RPCException("call " + invocation.getMethodName() + " failed,connection is closed");
@@ -49,7 +49,7 @@ public class FailRetryCluster extends AbstractPoolCluster {
 
 
     @Override
-    public URL route() {
+    public URL route(Invocation invocation) {
         if (registry == null) {
             return url;
         }

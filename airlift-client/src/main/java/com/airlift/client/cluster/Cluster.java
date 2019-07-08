@@ -1,5 +1,6 @@
 package com.airlift.client.cluster;
 
+import com.airlift.client.Invocation;
 import com.airlift.client.Invoker;
 import com.airlift.registry.URL;
 
@@ -9,6 +10,6 @@ public interface Cluster {
 
     <T> Invoker<T>  getInvoker();
 
-    URL route();
+    URL route(Invocation invocation);
 
 }

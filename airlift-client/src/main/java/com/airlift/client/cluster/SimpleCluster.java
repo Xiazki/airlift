@@ -1,5 +1,6 @@
 package com.airlift.client.cluster;
 
+import com.airlift.client.Invocation;
 import com.airlift.client.Invoker;
 import com.airlift.registry.URL;
 
@@ -15,7 +16,7 @@ public class SimpleCluster implements Cluster{
     }
 
     @Override
-    public URL route() {
+    public URL route(Invocation invocation) {
         return null;
     }
 }
