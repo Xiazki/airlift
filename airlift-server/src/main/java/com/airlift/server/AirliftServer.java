@@ -97,7 +97,11 @@ public class AirliftServer implements Closeable {
         }
         if (serverConfig.isNeedRegistry() && serverConfig.getRegistryUrls() != null) {
             this.registryFactory = RegistryFactoryProvider.INSTANCE.getRegistryFactory(RegistryType.ZOOKEEPER);
-            services.forEach(o -> providerUrls.add(createUrl(getThriftInterfaceService(o.getClass()))));
+            services.forEach(o -> {
+                        providerUrls.add(createUrl(getThriftInterfaceService(o.getClass())));
+                        logger.info("registry service:{}", o.getClass().getName());
+                    }
+            );
         }
     }
 

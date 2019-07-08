@@ -22,7 +22,7 @@ public class AirliftTest {
         ClientConfig clientConfig = ClientConfig.builer().withPort(9013).withRegistryUrls("127.0.0.1:2181").withHost("127.0.0.1").build();
         try (
                 AirliftServer airliftServer = new AirliftServer(serverConfig, services).start();
-                AirliftClientFactory<HelloWorldApi> clientFactory = new AirliftClientFactory<>(HelloWorldApi.class, clientConfig);
+                AirliftClientFactory<HelloWorldApi> clientFactory = new AirliftClientFactory<>(HelloWorldApi.class, clientConfig)
 
         ) {
             HelloWorldApi helloWorldApi = clientFactory.get();

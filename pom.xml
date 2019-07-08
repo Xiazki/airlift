@@ -14,6 +14,8 @@
         <module>airlift-registry</module>
         <module>airlift-common</module>
         <module>airlift-client</module>
+        <module>airlift-spring</module>
+        <module>airlift-springboot-starter</module>
     </modules>
 
     <properties>
@@ -24,6 +26,7 @@
         <curator.version>2.11.1</curator.version>
         <javassist.version>3.20.0-GA</javassist.version>
         <pool.version>2.6.2</pool.version>
+        <springboot.version>2.0.4.RELEASE</springboot.version>
     </properties>
 
     <dependencyManagement>
@@ -70,6 +73,20 @@
                 <artifactId>commons-pool2</artifactId>
                 <version>${pool.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>${springboot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <optional>true</optional>
+                <version>${springboot.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
