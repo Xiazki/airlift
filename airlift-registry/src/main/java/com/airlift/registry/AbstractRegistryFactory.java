@@ -36,7 +36,7 @@ public abstract class AbstractRegistryFactory {
     }
 
     public Registry get(URL url) {
-        String key = url.getServiceInterface();
+        String key = url.toKey();
         LOCK.lock();
         try {
             Registry registry = REGISTRIES.get(key);

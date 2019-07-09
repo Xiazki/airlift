@@ -15,6 +15,7 @@
 
         <module>swift-test</module>
         <module>zk-test</module>
+        <module>airlift-springboot-test</module>
     </modules>
 
 

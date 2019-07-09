@@ -58,7 +58,7 @@ public class ZkTest {
     }
 
     public static List<String> getChildren(ZooKeeper zooKeeper) throws KeeperException, InterruptedException {
-        return zooKeeper.getChildren("/airlift", false);
+        return zooKeeper.getChildren("/airlift/com.airlift.springtest.api.HelloWorldApi", false);
     }
 
 }

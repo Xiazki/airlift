@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: airlfit-test
+
+airlift:
+  registry-urls: 127.0.0.1:2181
+  application-name: airlift
+  client:
+    balance: "round-robin"
+    cluster: "fail-retry"
+  server:
+    enable: true
+    port: 9013

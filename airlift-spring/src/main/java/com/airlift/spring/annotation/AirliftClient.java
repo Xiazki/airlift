@@ -7,8 +7,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.ANNOTATION_TYPE})
 public @interface AirliftClient {
 
-    String host();
-
-    int port();
+    String host() default "";
+    int port() default 0;
 
 }

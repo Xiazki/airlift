@@ -26,7 +26,7 @@ public class ClientBeanPostProcessor implements BeanPostProcessor, ApplicationCo
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        Field[] fields = bean.getClass().getFields();
+        Field[] fields = bean.getClass().getDeclaredFields();
         for (Field field : fields) {
             try {
                 if (!field.isAccessible()) {
