@@ -84,3 +84,74 @@ public class ServerStartTest {
     }
 }
 ```
+
+##在springboot中使用airlift
+
+将项目clone下来后，使用maven打包到仓库后引入依赖
+```
+    <dependencies>
+        <dependency>
+            <groupId>com.xiazki</groupId>
+            <artifactId>airlift-springboot-starter</artifactId>
+            <version>1.0</version>
+        </dependency>
+        
+```
+在启动类上使用 `EnableAirlift` 来引入自动化配置，并且在application.yml配置文件中添加如下参数
+```java
+@SpringBootApplication
+@EnableAirlift
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class);
+    }
+}
+```
+yml中属性：
+```yaml
+airlift:
+  registry-urls: 127.0.0.1:2181
+  application-name: airlift
+  client:
+    balance: "round-robin"
+    cluster: "fail-retry"
+  server:
+    enable: true
+    port: 9013
+```
+（配置参数还在完善中）
+
+完成这些后，使用 `AirliftClient` 注解来注入airlift 服务依赖, 使用 `AirliftService`注解注册一个thrift rpc服务。
+
+客户端
+```java
+@RestController
+@RequestMapping("/test")
+public class TestController {
+
+    @AirliftClient
+    private HelloWorldApi helloWorldApi;
+
+    @GetMapping
+    public String get(@RequestParam("name") String name){
+        return helloWorldApi.getHi(name).getMessage();
+    }
+
+}
+```
+服务端
+```java
+
+@AirliftService
+public class HelloWorldApiService implements HelloWorldApi {
+    public ResultBean getHi(String name) {
+        ResultBean resultBean = new ResultBean();
+        resultBean.setMessage(name + ", hello!");
+        resultBean.setCode("0");
+        return resultBean;
+    }
+}
+
+```
+
+目前还要许多的功能和bug在不断完善和开发中。
