@@ -88,7 +88,6 @@ public class ServerStartTest {
 
 将项目clone下来后，使用maven打包到仓库后引入依赖
 ```
-  
         <dependency>
             <groupId>com.xiazki</groupId>
             <artifactId>airlift-springboot-starter</artifactId>
