@@ -11,5 +11,14 @@
 
     <artifactId>airlift-springboot-starter</artifactId>
 
+    <dependencies>
+
+        <dependency>
+            <groupId>com.xiazki</groupId>
+            <artifactId>airlift-spring</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+    </dependencies>
 
 </project>

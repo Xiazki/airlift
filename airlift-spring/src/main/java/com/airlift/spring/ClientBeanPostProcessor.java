@@ -1,7 +1,10 @@
 package com.airlift.spring;
 
 import com.airlift.client.AirliftClientFactory;
+import com.airlift.client.config.ClientConfig;
 import com.airlift.spring.annotation.AirliftClient;
+import com.airlift.spring.exception.HostNotFoundException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +17,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware {
 
+
+    @Autowired
+    private AirliftProperties airliftProperties;
     private ApplicationContext applicationContext;
     private ConcurrentHashMap<String, AirliftClientFactory<?>> factoryMap = new ConcurrentHashMap<>();
+
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -29,7 +36,7 @@ public class ClientBeanPostProcessor implements BeanPostProcessor, ApplicationCo
                 if (airliftClient == null) {
                     continue;
                 }
-                field.set(bean, getClient(field.getType()));
+                field.set(bean, getClient(field.getType(), airliftClient));
             } catch (IllegalAccessException e) {
                 throw new BeanCreationException("inject airlift client failed,client name:" + field.getName());
             }
@@ -49,11 +56,24 @@ public class ClientBeanPostProcessor implements BeanPostProcessor, ApplicationCo
         this.applicationContext = applicationContext;
     }
 
-    //todo
-    private Object getClient(Class<?> clazz) {
+    private Object getClient(Class<?> clazz, AirliftClient airliftClient) {
+        AirliftClientFactory<?> clientFactory = factoryMap.get(clazz.getName());
+        if (clientFactory == null) {
+            factoryMap.putIfAbsent(clazz.getName(), new AirliftClientFactory<>(clazz, buildClientConfig(airliftClient)));
+            clientFactory = factoryMap.get(clazz.getName());
+        }
+        return clientFactory.get();
+    }
 
-
-        return null;
+    //todo 完善属性相关配置
+    private ClientConfig buildClientConfig(AirliftClient airliftClient) {
+        ClientConfig.ClientConfigBuilder builder = ClientConfig.builer();
+        if (!StringUtils.isEmpty(airliftClient.host())) {
+            return builder.withHost(airliftClient.host()).withPort(airliftClient.port()).build();
+        } else if (StringUtils.isEmpty(airliftProperties.getRegistryUrls())) {
+            throw new HostNotFoundException("this client doesn't hast a host or registry url");
+        }
+        return builder.withNeedRegistry(true).withRegistryUrls(airliftProperties.getRegistryUrls()).build();
     }
 
 }
