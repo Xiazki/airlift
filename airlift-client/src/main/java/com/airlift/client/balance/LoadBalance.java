@@ -5,6 +5,9 @@ import com.airlift.registry.URL;
 
 import java.util.List;
 
+/**
+ * todo 继续完善
+ */
 public interface LoadBalance {
 
     /**

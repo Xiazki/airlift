@@ -4,6 +4,7 @@ import com.facebook.swift.service.ThriftClientManager;
 
 /**
  * 初始化thrift client Manger 后续修改
+ * todo
  */
 public class ThriftClientManagerHolder {
 
