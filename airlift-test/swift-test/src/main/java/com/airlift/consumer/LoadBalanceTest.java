@@ -1,5 +1,6 @@
 package com.airlift.consumer;
 
+import com.airlift.client.Invocation;
 import com.airlift.client.balance.LoadBalance;
 import com.airlift.client.balance.RoundRobinLoadBalance;
 import com.airlift.registry.URL;
@@ -20,7 +21,7 @@ public class LoadBalanceTest {
         urls.add(URL.builder().withPort(5).build());
         for (int i = 0; i < 20; i++) {
             new Thread(() -> {
-                URL url = loadBalance.select(urls);
+                URL url = loadBalance.select(urls, new Invocation());
                 System.out.println(Thread.currentThread().getName() + ":" + url.getPort());
             }).start();
         }

@@ -53,7 +53,7 @@ public class FailRetryCluster extends AbstractPoolCluster {
         if (registry == null) {
             return url;
         }
-        return loadBalance.select(registry.lookup());
+        return loadBalance.select(registry.lookup(), invocation);
     }
 
     private Object callWithRetry(RetryHelper retryHelper, String methodName) {
