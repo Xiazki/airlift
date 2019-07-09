@@ -68,7 +68,6 @@ public class ServerStartTest {
     public static void main(String[] args) {
         List<Object> services = new ArrayList<>();
         services.add(new HelloWorldApiService());
-
         ServerConfig serverConfig = ServerConfig.builder().withPort(9013).withRegistryUrls("127.0.0.1:2181").build();
         ClientConfig clientConfig = ClientConfig.builer().withRegistryUrls("127.0.0.1:2181").build();
         try (
@@ -89,7 +88,7 @@ public class ServerStartTest {
 
 将项目clone下来后，使用maven打包到仓库后引入依赖
 ```
-    <dependencies>
+  
         <dependency>
             <groupId>com.xiazki</groupId>
             <artifactId>airlift-springboot-starter</artifactId>
