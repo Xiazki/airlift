@@ -1,6 +1,8 @@
 package com.airlift.client;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Invocation<T> {
 
@@ -39,5 +41,23 @@ public class Invocation<T> {
 
     public void setClientProxy(Class<T> clientProxyClass) {
         this.clientProxyClass = clientProxyClass;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Invocation<?> that = (Invocation<?>) o;
+        return Arrays.equals(arguments, that.arguments) &&
+                Objects.equals(method, that.method) &&
+                Objects.equals(methodName, that.methodName) &&
+                Objects.equals(clientProxyClass, that.clientProxyClass);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(method, methodName, clientProxyClass);
+        result = 31 * result + Arrays.hashCode(arguments);
+        return result;
     }
 }
