@@ -51,7 +51,6 @@ public interface HelloWorldApi {
 public class HelloWorldApiService implements HelloWorldApi {
 
     public ResultBean getHi(String name) {
-        System.out.println("call getHi");
         ResultBean resultBean = new ResultBean();
         resultBean.setMessage(name + " hello world!");
         resultBean.setCode("0");
@@ -68,15 +67,19 @@ public class ServerStartTest {
     public static void main(String[] args) {
         List<Object> services = new ArrayList<>();
         services.add(new HelloWorldApiService());
+        
         ServerConfig serverConfig = ServerConfig.builder().withPort(9013).withRegistryUrls("127.0.0.1:2181").build();
         ClientConfig clientConfig = ClientConfig.builer().withRegistryUrls("127.0.0.1:2181").build();
+        
         try (
                 AirliftServer airliftServer = new AirliftServer(serverConfig, services).start();
                 AirliftClientFactory<HelloWorldApi> clientFactory = new AirliftClientFactory<>(clientConfig)
         ) {
+            
             HelloWorldApi helloWorldApi = clientFactory.get();
             ResultBean resultBean =  helloWorldApi.getHi("test");
             System.out.println(resultBean.getMessage());
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
