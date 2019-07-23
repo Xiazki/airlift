@@ -54,13 +54,9 @@ public class ConsistentHashLoadBalance implements LoadBalance {
         public ConsistentHash(int numberOfReplicas, Collection<URL> nodes, int identityHashCode) {
             this.numberOfReplicas = numberOfReplicas;
             this.identityHashCode = identityHashCode;
-            this.hashFunc = new HashFunc() {
-
-                @Override
-                public Long hash(Object key) {
+            this.hashFunc = key -> {
 //                return fnv1HashingAlg(key.toString());
-                    return md5HashingAlg(key.toString());
-                }
+                return md5HashingAlg(key.toString());
             };
             //初始化节点
             for (URL node : nodes) {
