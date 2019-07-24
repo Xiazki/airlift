@@ -57,7 +57,7 @@ public class AirliftClientFactory<T> implements Closeable {
         ProxyFactory proxyFactory = new ProxyFactory();
         proxyFactory.setInterfaces(new Class[]{interfaceClass});
         Class proxyClass = proxyFactory.createClass();
-        T proxy = (T) proxyClass.newInstance();
+        T proxy = interfaceClass.cast(proxyClass.newInstance());
         ((ProxyObject) proxy).setHandler(new ProxyHandler());
         return proxy;
     }
