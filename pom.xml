@@ -27,7 +27,7 @@
         <javassist.version>3.20.0-GA</javassist.version>
         <pool.version>2.6.2</pool.version>
         <springboot.version>2.1.6.RELEASE</springboot.version>
-        <hibernate.validator>5.2.4.Final</hibernate.validator>
+        <hibernate.validator>5.3.5.Final</hibernate.validator>
     </properties>
 
     <dependencyManagement>
